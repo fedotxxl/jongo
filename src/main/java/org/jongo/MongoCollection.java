@@ -84,6 +84,10 @@ public class MongoCollection {
         return new Find(collection, readPreference, mapper.getUnmarshaller(), mapper.getQueryFactory(), query, parameters);
     }
 
+    public Find find(DBObject request) {
+        return new Find(collection, readPreference, mapper.getUnmarshaller(), mapper.getQueryFactory(), request);
+    }
+
     public FindAndModify findAndModify() {
         return findAndModify(ALL);
     }

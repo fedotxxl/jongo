@@ -16,6 +16,7 @@
 
 package org.jongo;
 
+import com.mongodb.QueryBuilder;
 import com.mongodb.ReadPreference;
 import org.bson.types.ObjectId;
 import org.jongo.marshall.MarshallingException;
@@ -103,6 +104,19 @@ public class FindTest extends JongoTestCase {
 
         /* when */
         Iterator<Friend> results = collection.find("{'coordinate.lat':2}").as(Friend.class).iterator();
+
+        /* then */
+        assertThat(results.next().getCoordinate().lat).isEqualTo(2);
+        assertThat(results.hasNext()).isFalse();
+    }
+
+    @Test
+    public void canFindUsingSubPropertyA() throws Exception {
+        /* given */
+        collection.save(new Friend("John", new Coordinate(2, 31)));
+
+        /* when */
+        Iterator<Friend> results = collection.find(QueryBuilder.start("coordinate.lat").is(2).get()).as(Friend.class).iterator();
 
         /* then */
         assertThat(results.next().getCoordinate().lat).isEqualTo(2);

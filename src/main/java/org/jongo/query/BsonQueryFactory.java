@@ -29,6 +29,8 @@ import org.jongo.marshall.MarshallingException;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class BsonQueryFactory implements QueryFactory {
 
@@ -171,6 +173,39 @@ public class BsonQueryFactory implements QueryFactory {
 
         return new BsonQuery(dbo);
 
+    }
+
+    public DBObject marshallDBObject(DBObject request) {
+        marshallDBObject((Map<String, Object>)request);
+        return request;
+    }
+
+    private Object marshallDBObject(Map request) {
+        Set<Map.Entry> entries = request.entrySet();
+
+        for ( Map.Entry e : entries ){
+            e.setValue(marshallCustomParameter(e.getValue()));
+        }
+
+        return request;
+    }
+
+    private Object marshallCustomParameter(Object value) {
+        if (value instanceof Map) {
+            return marshallDBObject((Map) value);
+        } else if (value instanceof Collection) {
+            return marshallCustomCollection((Collection) value);
+        } else {
+            return marshallParameter(value, false);
+        }
+    }
+
+    private DBObject marshallCustomCollection(Collection<?> parameters) {
+        BasicDBList list = new BasicDBList();
+        for (Object param : parameters) {
+            list.add(marshallCustomParameter(param));
+        }
+        return list;
     }
 
     private Object marshallParameter(Object parameter, boolean serializeBsonPrimitives) {

@@ -16,6 +16,9 @@
 
 package org.jongo.query;
 
+import com.mongodb.DBObject;
+
 public interface QueryFactory {
     Query createQuery(String query, Object... parameters);
+    DBObject marshallDBObject(DBObject request);
 }

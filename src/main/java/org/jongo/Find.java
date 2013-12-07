@@ -32,7 +32,8 @@ public class Find {
     private final ReadPreference readPreference;
     private final Unmarshaller unmarshaller;
     private final QueryFactory queryFactory;
-    private final Query query;
+    private Query query;
+    private DBObject request;
     private Query fields, sort, hint;
     private Integer limit, skip;
 
@@ -44,14 +45,26 @@ public class Find {
         this.query = this.queryFactory.createQuery(query, parameters);
     }
 
+    Find(DBCollection collection, ReadPreference readPreference, Unmarshaller unmarshaller, QueryFactory queryFactory, DBObject request) {
+        this.readPreference = readPreference;
+        this.unmarshaller = unmarshaller;
+        this.collection = collection;
+        this.queryFactory = queryFactory;
+        this.request = this.queryFactory.marshallDBObject(request);
+    }
+
     public <T> Iterable<T> as(final Class<T> clazz) {
         return map(newMapper(clazz, unmarshaller));
     }
 
     public <T> Iterable<T> map(ResultHandler<T> resultHandler) {
-        DBCursor cursor = new DBCursor(collection, query.toDBObject(), getFieldsAsDBObject(), readPreference);
+        DBCursor cursor = new DBCursor(collection, getDBObject(), getFieldsAsDBObject(), readPreference);
         addOptionsOn(cursor);
         return new MongoIterator<T>(cursor, resultHandler);
+    }
+
+    private DBObject getDBObject() {
+        return (request != null) ? request : query.toDBObject();
     }
 
     private void addOptionsOn(DBCursor cursor) {

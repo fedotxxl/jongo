@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import org.bson.types.ObjectId;
 import org.jongo.Mapper;
 import org.jongo.ObjectIdUpdater;
@@ -131,6 +132,10 @@ public class JacksonMapperTest {
 
         QueryFactory factory = new QueryFactory() {
             public Query createQuery(String query, Object... parameters) {
+                return null;
+            }
+
+            public DBObject marshallDBObject(DBObject request) {
                 return null;
             }
         };
