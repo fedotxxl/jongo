@@ -210,6 +210,9 @@ public class BsonQueryFactory implements QueryFactory {
 
     private Object marshallParameter(Object parameter, boolean serializeBsonPrimitives) {
         try {
+            if (parameter != null && parameter instanceof DBObject) {
+                return marshallDBObject((DBObject) parameter);
+            }
             if (parameter == null || Bson.isPrimitive(parameter)) {
                 return serializeBsonPrimitives ? JSON.serialize(parameter) : parameter;
             }
