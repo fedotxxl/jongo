@@ -16,6 +16,29 @@
 
 package org.jongo.model;
 
-public enum Gender {
-    FEMALE
+import com.fasterxml.jackson.annotation.JsonCreator;
+import org.jongo.JongoEnum;
+
+public enum Gender implements JongoEnum {
+    FEMALE(3);
+
+    private int id;
+
+    private Gender(int id) {
+        this.id = id;
+    }
+
+    public int toStored() {
+        return id;
+    }
+
+    @JsonCreator
+    public static Gender fromStored(int id) {
+        for (Gender g : values()) {
+            if (g.id == id) return g;
+        }
+
+        return null;
+    }
+
 }

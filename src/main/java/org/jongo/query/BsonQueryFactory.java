@@ -23,6 +23,7 @@ import com.mongodb.util.JSON;
 import com.mongodb.util.JSONCallback;
 import org.bson.BSON;
 import org.bson.BSONObject;
+import org.jongo.JongoEnum;
 import org.jongo.bson.Bson;
 import org.jongo.marshall.Marshaller;
 import org.jongo.marshall.MarshallingException;
@@ -215,6 +216,9 @@ public class BsonQueryFactory implements QueryFactory {
             }
             if (parameter == null || Bson.isPrimitive(parameter)) {
                 return serializeBsonPrimitives ? JSON.serialize(parameter) : parameter;
+            }
+            if (parameter instanceof JongoEnum) {
+                return ((JongoEnum) parameter).toStored();
             }
             if (parameter instanceof Enum) {
                 String name = ((Enum<?>) parameter).name();
