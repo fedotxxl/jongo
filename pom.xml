@@ -21,11 +21,11 @@
     <distributionManagement>
         <repository>
             <id>myrepo-release</id>
-            <url>http://repo.mymavenrepo.com/4uNtH5Y9iz4rZosknoK6/</url>
+            <url>http://repo.mymavenrepo.com/tDSjYK4HlGgKW7fXKixl/</url>
         </repository>
         <snapshotRepository>
             <id>myrepo-snapshot</id>
-            <url>http://repo.mymavenrepo.com/4uNtH5Y9iz4rZosknoK6/</url>
+            <url>http://repo.mymavenrepo.com/tDSjYK4HlGgKW7fXKixl/</url>
         </snapshotRepository>
     </distributionManagement>
 
